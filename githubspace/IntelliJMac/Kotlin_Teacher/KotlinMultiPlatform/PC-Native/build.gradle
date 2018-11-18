@@ -1,0 +1,24 @@
+group 'com.bennyhuo.kmp'
+
+apply plugin: 'konan'
+
+konanArtifacts {
+    library('kotlinmultiplatform_native_mac'){
+        enableMultiplatform true
+        enableOptimizations true
+        srcFiles fileTree('src/logger/kotlin')
+    }
+    program('main'){
+        libraries{
+            artifact "kotlinmultiplatform_native_mac"
+        }
+
+        enableMultiplatform false
+        enableOptimizations true
+        srcFiles fileTree('src/main/kotlin')
+    }
+}
+
+dependencies {
+    expectedBy project(":")
+}

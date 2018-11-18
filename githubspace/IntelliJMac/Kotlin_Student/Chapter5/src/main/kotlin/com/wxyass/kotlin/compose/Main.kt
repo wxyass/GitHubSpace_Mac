@@ -1,0 +1,32 @@
+package com.wxyass.kotlin.compose
+
+/**
+ * Created by benny on 4/15/17.
+ */
+//f(g(x))   m(x) = f(g(x))
+val add5 = {i: Int -> i + 5} // g(x)
+val multiplyBy2 = {i : Int -> i * 2} // f(x)
+
+fun main(args: Array<String>) {
+    println(multiplyBy2(add5(8))) // (5 + 8) * 2
+
+    val add5AndMultiplyBy2 = add5 andThen multiplyBy2
+    println(add5AndMultiplyBy2(8)) // m(x) = f(g(x))
+
+    val add5ComposeMultiplyBy2 = add5 compose  multiplyBy2
+    println(add5ComposeMultiplyBy2(8)) // m(x) = g(f(x))
+}
+
+// 中缀 Function1 扩展方法
+infix fun <P1, P2, R> Function1<P1, P2>.andThen(function: Function1<P2, R>): Function1<P1,R>{
+    return fun(p1: P1): R{
+        return function.invoke(this.invoke(p1))
+    }
+}
+
+infix fun <P1,P2, R> Function1<P2, R>
+        .compose(function: Function1<P1, P2>): Function1<P1, R>{
+    return fun(p1: P1): R{
+        return this.invoke(function.invoke(p1))
+    }
+}
